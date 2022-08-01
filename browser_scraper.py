@@ -121,8 +121,8 @@ if __name__ == '__main__':
 
             status = browser_scraper(driver, d[0], d[1])
             if status:
-                try:
-                    with paramiko.SSHClient() as ssh:
+                with paramiko.SSHClient() as ssh:
+                    try:
                         ssh.set_missing_host_key_policy(paramiko.WarningPolicy())
                         ssh.connect(config['host'], 
                             port = config['port'],
@@ -131,9 +131,8 @@ if __name__ == '__main__':
 
                         sftp_con = ssh.open_sftp() 
                         sftp_con.put(f"{config['src']}{d[1]}", f"{config['dst']}{d[1]}")
-
-                except Exception as err:
-                    logger.debug(f'ssh: {err}')
+                    except Exception as err:
+                        logger.debug(f'ssh: {err}')
             
             sleep(time)
         
