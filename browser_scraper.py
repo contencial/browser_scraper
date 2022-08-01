@@ -76,12 +76,12 @@ def browser_scraper(driver, url, filename):
 
         sleep(5)
 
-        with open(f"output/{filename}", "w") as handle:
+        with open(f"output/{filename}", "w", encoding="utf-8") as handle:
             handle.write(driver.page_source)
         
         return True
     except Exception as err:
-        print(f'browser_scraper: {err}')
+        logger.error(f'browser_scraper: {err}')
         return False
 
 
@@ -145,5 +145,5 @@ if __name__ == '__main__':
     except Exception as err:
         driver.close()
         driver.quit()
-        logger.debug(f'browser_scraper: {err}')
+        logger.error(f'browser_scraper: {err}')
         exit(1)
