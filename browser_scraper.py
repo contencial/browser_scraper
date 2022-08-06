@@ -12,6 +12,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException 
 from fake_useragent import UserAgent
 from webdriver_manager.chrome import ChromeDriverManager
@@ -71,8 +73,10 @@ def get_scraping_info(sheet):
     return time, data
 
 def browser_scraper(driver, url, filename):
+    wait = WebDriverWait(driver=driver, timeout=60)
     try:
         driver.get(url)
+        wait.until(EC.presence_of_all_elements_located)
 
         sleep(5)
 
@@ -87,6 +91,7 @@ def browser_scraper(driver, url, filename):
 
 ### main_script ###
 if __name__ == '__main__':
+    os.environ["PYTHONUTF8"] = '1'
     config = {
         'host': os.environ["BROWSER_SCRAPER_HOST"],
         'username': os.environ["BROWSER_SCRAPER_USER"],
