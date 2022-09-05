@@ -122,7 +122,7 @@ if __name__ == '__main__':
             if not d[2]:
                 hypertext = f'=ARRAYFORMULA(HYPERLINK("http://tsuyoshikashiwazaki.net/browser/"&B{2+i}))'
                 sheet.update_cell(2+i, 3, hypertext)
-            logger.debug(f'{d[0]}:')
+            logger.debug(f'{datetime.datetime.now().strftime("%Y-%m-%d")}: {d[0]}')
 
             status = browser_scraper(driver, d[0], d[1])
             if status:
