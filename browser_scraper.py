@@ -72,13 +72,13 @@ def get_scraping_info(sheet):
 
     return time, data
 
-def browser_scraper(driver, url, filename):
+def browser_scraper(driver, url, filename, time):
     wait = WebDriverWait(driver=driver, timeout=60)
     try:
         driver.get(url)
         wait.until(EC.presence_of_all_elements_located)
 
-        sleep(5)
+        sleep(time)
 
         with open(f"output/{filename}", "w", encoding="utf-8") as handle:
             handle.write(driver.page_source)
@@ -124,7 +124,7 @@ if __name__ == '__main__':
                 sheet.update_cell(2+i, 3, hypertext)
             logger.debug(f'{datetime.datetime.now().strftime("%m/%d %H:%M")}: {d[0]}')
 
-            status = browser_scraper(driver, d[0], d[1])
+            status = browser_scraper(driver, d[0], d[1], time)
             if status:
                 with paramiko.SSHClient() as ssh:
                     try:
@@ -138,8 +138,6 @@ if __name__ == '__main__':
                         sftp_con.put(f"{config['src']}{d[1]}", f"{config['dst']}{d[1]}")
                     except Exception as err:
                         logger.debug(f'ssh: {err}')
-            
-            sleep(time)
         
         sheet.update_acell('F1', today.strftime('%m/%d %H:%M'))
         
