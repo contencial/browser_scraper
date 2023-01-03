@@ -12,6 +12,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome import service as fs
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException 
@@ -40,21 +42,22 @@ def launch_driver():
 #    options.add_argument('--headless')
     options.add_argument(f'user-agent={ua.chrome}')
 
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    chrome_service = fs.Service(executable_path=ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=chrome_service, options=options)
     driver.get(url)
     driver.maximize_window()
     return driver
 
 def check_exists_by_class_name(driver, class_name):
     try:
-        driver.find_element_by_class_name(class_name)
+        driver.find_element(By.CLASS_NAME, class_name)
     except NoSuchElementException:
         return False
     return True
 
 def check_exists_by_xpath(driver, xpath):
     try:
-        driver.find_element_by_xpath(xpath)
+        driver.find_element(By.XPATH, xpath)
     except NoSuchElementException:
         return False
     return True
